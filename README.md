@@ -1,11 +1,8 @@
-# ML Experiment Auditor — OpenEnv Environment
+# ML Experiment Auditor - OpenEnv Environment
 
 An OpenEnv environment for the **Meta × HuggingFace OpenEnv Hackathon**.
 
-An AI agent reads synthetic machine learning experiment logs and must detect real problems that ML engineers care about: data leakage, bad configurations, and reproducibility gaps.
-
 ---
-
 ## Environment Description
 
 ### Concept
