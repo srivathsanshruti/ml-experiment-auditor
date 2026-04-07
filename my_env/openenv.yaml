@@ -1,0 +1,99 @@
+spec_version: 1
+
+name: ml-experiment-auditor
+version: "1.0.0"
+description: >
+  An AI agent reads synthetic machine learning experiment logs and must detect
+  real problems that ML engineers care about: data leakage, bad configs, and
+  reproducibility issues. All graders are fully deterministic.
+
+author: "ML Audit Team"
+license: MIT
+
+entry_point: "my_env.server.app:app"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  health_endpoint: "/health"
+  reset_endpoint: "/reset"
+  step_endpoint: "/step"
+
+observation_space:
+  type: text
+  description: >
+    A synthetic ML experiment log as plain text, plus metadata fields
+    (task_id, task_description, step, done).
+
+action_space:
+  type: structured
+  actions:
+    - name: inspect
+      description: >
+        Request the full log or a named section (config, training, evaluation).
+      fields:
+        - name: action_type
+          type: string
+          value: "inspect"
+        - name: section
+          type: string
+          enum: [full, config, training, evaluation]
+    - name: submit
+      description: >
+        Submit structured findings for deterministic grading.
+      fields:
+        - name: action_type
+          type: string
+          value: "submit"
+        - name: findings
+          type: object
+
+tasks:
+  - id: task1
+    name: "Config Error Detection"
+    description: >
+      Detect obvious configuration errors in the experiment log:
+      NaN loss values, learning rate above 10, and missing validation split.
+    difficulty: easy
+    max_steps: 10
+    reward_threshold: 0.67
+    expected_findings_format:
+      issues:
+        type: array
+        items: string
+        valid_values: [nan_loss, high_learning_rate, no_validation_split]
+
+  - id: task2
+    name: "Data Leakage Detection"
+    description: >
+      Detect data leakage where test-set metrics are reported at an earlier
+      timestamp than the train/test split step.
+    difficulty: medium
+    max_steps: 15
+    reward_threshold: 0.5
+    expected_findings_format:
+      data_leakage_detected:
+        type: boolean
+      leakage_type:
+        type: string
+        valid_values: [test_evaluation_before_split, none]
+
+  - id: task3
+    name: "Full ML Audit"
+    description: >
+      Comprehensive audit: detect data leakage, metric inconsistency
+      (reported accuracy does not match confusion-matrix accuracy), missing
+      random seeds, and unpinned dependency versions. Return all findings
+      as a structured list.
+    difficulty: hard
+    max_steps: 20
+    reward_threshold: 0.5
+    expected_findings_format:
+      issues:
+        type: array
+        items: string
+        valid_values:
+          - data_leakage
+          - metric_inconsistency
+          - no_random_seed
+          - unpinned_requirements
