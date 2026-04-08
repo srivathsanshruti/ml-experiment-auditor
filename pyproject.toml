@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "ml-experiment-auditor"
+version = "1.0.0"
+description = "ML Experiment Auditor - OpenEnv environment for detecting ML experiment issues"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "pydantic",
+    "openai",
+    "openenv-core",
+]
+
+[project.scripts]
+server = "my_env.server.app:main"
