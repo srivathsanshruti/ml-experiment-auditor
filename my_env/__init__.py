@@ -1,13 +1,9 @@
 """ML Experiment Auditor — OpenEnv environment package."""
-
 from .client import MLAuditClient
-from .models import Action, Observation, ResetResponse, StepResponse, TaskInfo
+from .models import MLAuditAction, MLAuditObservation
 
 __all__ = [
     "MLAuditClient",
-    "Action",
-    "Observation",
-    "ResetResponse",
-    "StepResponse",
-    "TaskInfo",
+    "MLAuditAction",
+    "MLAuditObservation",
 ]
