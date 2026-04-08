@@ -14,7 +14,7 @@ entry_point: "my_env.server.app:app"
 
 server:
   host: "0.0.0.0"
-  port: 8000
+  port: 7860
   health_endpoint: "/health"
   reset_endpoint: "/reset"
   step_endpoint: "/step"

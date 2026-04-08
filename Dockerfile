@@ -2,16 +2,19 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+COPY . .
+
 RUN pip install --no-cache-dir \
-    streamlit \
-    pandas \
-    requests \
+    fastapi \
+    "uvicorn[standard]" \
+    pydantic \
     openai \
     openenv-core
 
-COPY . .
+RUN pip install --no-cache-dir -e my_env/ 2>/dev/null || true
 
 EXPOSE 7860
 
-CMD ["python3", "-m", "streamlit", "run", "dashboard.py", \
-     "--server.port=7860", "--server.address=0.0.0.0", "--server.headless=true"]
+ENV PYTHONPATH=/app
+
+CMD ["uvicorn", "my_env.server.app:app", "--host", "0.0.0.0", "--port", "7860"]
