@@ -29,6 +29,7 @@ API_BASE_URL: str = os.environ.get(
     "API_BASE_URL", "https://router.huggingface.co/v1"
 ).rstrip("/")
 MODEL_NAME: str = os.environ.get("MODEL_NAME", "meta-llama/Llama-3.3-70B-Instruct")
+API_KEY: str = os.environ["API_KEY"]
 HF_TOKEN: Optional[str] = os.environ.get("HF_TOKEN")
 ENV_SERVER_URL: str = os.environ.get("ENV_SERVER_URL", "http://localhost:8000").rstrip("/")
 
@@ -39,7 +40,7 @@ if HF_TOKEN is None:
 # OpenAI-compatible client
 # ---------------------------------------------------------------------------
 
-_llm = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
+_llm = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
 
 # ---------------------------------------------------------------------------
 # Per-task system prompts
