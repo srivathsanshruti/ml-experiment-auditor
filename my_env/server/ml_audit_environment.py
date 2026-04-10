@@ -270,7 +270,7 @@ def _grade_task1(findings: Dict[str, Any]) -> Tuple[float, str]:
     ground_truth = GROUND_TRUTH["task1"]["issues"]
     correct = submitted & ground_truth
     false_pos = submitted - ground_truth
-    score = len(correct) / len(ground_truth)
+    score = max(0.01, min(0.99, len(correct) / len(ground_truth)))
     detail = (
         f"Detected {len(correct)}/{len(ground_truth)}. "
         f"Correct: {sorted(correct)}. "
@@ -292,6 +292,7 @@ def _grade_task2(findings: Dict[str, Any]) -> Tuple[float, str]:
         parts.append("leakage_type correct (+0.5)")
     else:
         parts.append(f"leakage_type '{findings.get('leakage_type', '')}' wrong (+0.0)")
+    score = max(0.01, min(0.99, score))
     return round(score, 4), " | ".join(parts)
 
 
@@ -300,7 +301,7 @@ def _grade_task3(findings: Dict[str, Any]) -> Tuple[float, str]:
     ground_truth = GROUND_TRUTH["task3"]["issues"]
     correct = submitted & ground_truth
     false_pos = submitted - ground_truth
-    score = len(correct) / len(ground_truth)
+    score = max(0.01, min(0.99, len(correct) / len(ground_truth)))
     detail = (
         f"Detected {len(correct)}/{len(ground_truth)}. "
         f"Correct: {sorted(correct)}. "
