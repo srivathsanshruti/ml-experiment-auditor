@@ -49,15 +49,16 @@ SYSTEM_PROMPTS: Dict[str, str] = {
 
 
 def _log_start(task_id: str) -> None:
-    print(json.dumps({"type": "START", "task_id": task_id, "env": "ml_audit", "model": MODEL_NAME}), flush=True)
+    print(f"[START] task={task_id} env=ml_audit model={MODEL_NAME}", flush=True)
 
 
 def _log_step(step: int, action: str, reward: float, done: bool) -> None:
-    print(json.dumps({"type": "STEP", "step": step, "action": action, "reward": reward, "done": done}), flush=True)
+    done_str = "true" if done else "false"
+    print(f"[STEP] step={step} action={action} reward={reward:.2f} done={done_str}", flush=True)
 
 
 def _log_end(task_id: str, final_reward: float, steps: int) -> None:
-    print(json.dumps({"type": "END", "task_id": task_id, "final_reward": final_reward, "steps": steps}), flush=True)
+    print(f"[END] task={task_id} score={final_reward:.4f} steps={steps}", flush=True)
 
 
 def _env_reset(task_id: str) -> Dict[str, Any]:
@@ -140,9 +141,9 @@ def main() -> None:
             reward = run_task(task_id)
             total_reward += reward
         except Exception as exc:
-            print(json.dumps({"type": "END", "task_id": task_id, "final_reward": 0.0, "steps": 0, "error": str(exc)}), flush=True)
+            print(f"[END] task={task_id} score=0.0 steps=0 error={str(exc)}", flush=True)
     avg = total_reward / len(task_ids)
-    print(json.dumps({"type": "SUMMARY", "average_reward": round(avg, 4)}), flush=True)
+    print(f"[SUMMARY] average_reward={avg:.4f}", flush=True)
 
 
 if __name__ == "__main__":
